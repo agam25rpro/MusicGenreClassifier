@@ -366,6 +366,25 @@ def main():
     # Display genre descriptions
     st.markdown(genre_cards, unsafe_allow_html=True)
     
+    # Display How it Works section
+    st.markdown("""
+        <div class="genre-card" style="margin-top: 30px;">
+            <h2 class="genre-title" style="margin-bottom: 10px;">⚙️ How It Works</h2>
+            <div style="color: #ccc; line-height: 1.6; font-size: 16px;">
+                <p style="margin-bottom: 15px;">
+                    <strong>Model Architecture:</strong> At its core, the classifier is a TensorFlow Convolutional Neural Network (CNN). 
+                    Instead of analyzing raw audio waveforms, it treats classification as an image recognition task by evaluating 2D Mel spectrograms 
+                    generated from the audio. The CNN extracts spatial features from these spectrograms to determine the genre.
+                </p>
+                <p>
+                    <strong>Data Handling & Preprocessing:</strong> When you upload a track, it is split into 4-second overlapping chunks to capture 
+                    patterns throughout the entire song. Each chunk is processed by Librosa and Torchaudio, converted to a Mel spectrogram, and resized to 
+                    210x210 pixels for the model. The CNN classifies each chunk independently, and a majority vote decides the final, overall genre prediction.
+                </p>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+    
     # Upload section with enhanced styling
     st.markdown("""
         <div class='upload-section'>
