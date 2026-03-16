@@ -1,5 +1,11 @@
 # Music Genre Classifier
 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Streamlit](https://img.shields.io/badge/Streamlit-%23FE4B4B.svg?style=for-the-badge&logo=streamlit&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
+![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue?style=for-the-badge)
+![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge)
+
 A complete, AI-powered music genre classification system that classifies audio files into one of ten genres using a deep learning model trained on Mel spectrogram representations. Upload any MP3 file and receive an accurate genre prediction along with interactive visualizations showing the confidence distribution across all supported genres.
 
 ---
