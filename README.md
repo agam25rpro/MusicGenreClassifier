@@ -1,7 +1,8 @@
 # Music Genre Classifier
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![Streamlit](https://img.shields.io/badge/Streamlit-%23FE4B4B.svg?style=for-the-badge&logo=streamlit&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
 ![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue?style=for-the-badge)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge)
@@ -35,7 +36,7 @@ A complete, AI-powered music genre classification system that classifies audio f
 
 **Music Genre Classifier** is a full-stack machine learning web application that allows users to upload an MP3 audio file and receive real-time genre classification results. The system uses a TensorFlow-based Convolutional Neural Network (CNN) trained on Mel spectrogram images derived from audio data. It segments audio into overlapping chunks, generates a Mel spectrogram for each chunk, classifies each one independently, and uses a majority voting strategy to determine the final genre prediction. The results are displayed as an interactive Plotly donut chart alongside the predicted genre label.
 
-The application is built with Streamlit for the frontend and is deployed on Hugging Face Spaces for public access.
+The application features a decoupled architecture: a sleek, minimal Vanilla JS frontend designed for Vercel, and a high-performance FastAPI backend that serves the predictive model. The backend is also deployed on Hugging Face Spaces for public API access.
 
 ---
 
@@ -53,19 +54,20 @@ Below are screenshots of the deployed application interface:
 
 ## Architecture
 
-The project follows a single-application architecture where the UI, model serving, and preprocessing logic all coexist within a single Streamlit Python script (`app.py`).
+The project follows a decoupled architecture cleanly separating the UI in the `Frontend` directory from the model serving logic in the `Backend` directory.
 
 ### Frontend
 
-- **Framework**: Streamlit, a Python-native framework for building interactive data applications.
-- **Styling**: Custom CSS injected via `st.markdown` for a dark-themed, animated UI with card layouts, hover effects, glowing animations, a loading wave indicator, and responsive grid layouts for genre descriptions.
-- **Visualization**: Plotly is used to render an interactive donut chart showing the genre distribution predicted across all audio chunks.
+- **Framework**: Vanilla HTML, CSS, and JavaScript. No heavy frontend frameworks required.
+- **Styling**: Engineered with a strict two-color minimalist aesthetic (Deep Black and Electric Cyan) using custom CSS. Fully responsive layout.
+- **Visualization**: Chart.js is used to render an interactive doughnut chart showing the genre probability distribution dynamically upon receiving the API JSON payload.
 
-### Backend and Model Serving
+### Backend
 
-- **Model Loading**: The trained TensorFlow model (`Trained_model.h5`) is downloaded from Google Drive on first run using `gdown` and cached via `st.cache_resource` to avoid redundant downloads on subsequent requests.
-- **Inference**: TensorFlow handles model loading and prediction. Audio preprocessing leverages both `librosa` (for loading raw audio) and `torchaudio` (for Mel spectrogram transform generation).
-- **Deployment**: The entire app is deployed as a Hugging Face Space, serving both the UI and the model inference from a single container.
+- **API Framework**: FastAPI, chosen for its asynchronous efficiency and highly reliable ASGI servers (Uvicorn).
+- **Model Loading**: The TensorFlow model (`Trained_model.h5`) is safely downloaded from Google Drive on first run and is lazily-loaded with thread-locking to prevent initialization crashes.
+- **Inference**: Librosa is used for audio processing and converting into Mel spectrogram representations natively without relying on heavy Torch dependencies. TensorFlow processes these tensors natively.
+- **Deployment**: The backend API (`/api/classify`) easily deploys to Hugging Face Spaces via a Docker configuration.
 
 ---
 
@@ -150,25 +152,28 @@ git clone https://github.com/agam25rpro/MusicGenreClassifier.git
 # Navigate to the project directory
 cd MusicGenreClassifier
 
-# Create and activate a virtual environment (recommended)
+# --- Backend Setup ---
+# Create and activate a virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -r Backend/requirements.txt
 
-# Run the application
-streamlit run app.py
+# Run the FastAPI server locally (will start on port 8000)
+python Backend/app.py
+
+# --- Frontend Setup ---
+# Open the frontend in any web browser without needing a build step
+# Simply open Frontend/index.html in your browser!
 ```
-
-The application will open in your browser at `http://localhost:8501`.
 
 ---
 
 ## Usage
 
-1. Visit the application URL (either the local Streamlit server or the Hugging Face Space).
-2. Scroll down to the upload section.
+1. Ensure your backend is running, or that the Hugging Face Space API endpoint is active.
+2. Open `Frontend/index.html` in your web browser.
 3. Click the upload button and select an MP3 file from your device.
 4. Wait for the processing pipeline to complete (audio chunking, spectrogram generation, and model inference).
 5. View the predicted genre and explore the interactive donut chart showing the classification distribution across all chunks.

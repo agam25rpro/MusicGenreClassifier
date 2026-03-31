@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Genre Classifier</title>
+    
+    <!-- Google Fonts: Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="container">
+        
+        <header class="app-header">
+            <h1>MUSIC GENRE CLASSIFIER</h1>
+            <p>Upload any audio file to analyze its deep acoustic patterns and detect its genre.</p>
+        </header>
+
+        <!-- Upload Section -->
+        <section id="upload-section" class="upload-container">
+            <div id="dropzone" class="dropzone">
+                <div class="dropzone-content">
+                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4V20M12 4L8 8M12 4L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/>
+                        <path d="M4 20H20" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+                    </svg>
+                    <p class="dropzone-text">Drag & drop your .wav or .mp3 here</p>
+                    <p class="dropzone-subtext">or click to browse local files</p>
+                </div>
+                <input type="file" id="file-input" accept="audio/mpeg, audio/wav, audio/*" hidden>
+            </div>
+
+            <div id="file-preview" class="file-preview hidden">
+                <span id="file-name" class="file-name">filename.mp3</span>
+                <button id="remove-file" class="remove-btn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <button id="analyze-btn" class="btn primary-btn" disabled>ANALYZE GENRE</button>
+            <div id="error-message" class="error-message hidden"></div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="results-container hidden">
+            <div class="result-header">
+                <h2>PREDICTED GENRE</h2>
+                <h1 id="winning-genre" class="winning-genre-text">Unknown</h1>
+            </div>
+
+            <div class="chart-wrapper">
+                <h3>Prediction Confidence</h3>
+                <div style="position: relative; height:300px; width:100%">
+                    <canvas id="confidence-chart"></canvas>
+                </div>
+            </div>
+            
+            <button id="reset-btn" class="btn secondary-btn">ANALYZE ANOTHER</button>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works">
+            <h2>HOW IT WORKS</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>01. Chunking</h3>
+                    <p>Instead of processing the entire song at once, the audio is mathematically split into overlapping 4-second chunks. This ensures continuous acoustic patterns are captured smoothly.</p>
+                </div>
+                <div class="info-card">
+                    <h3>02. Mel Spectrograms</h3>
+                    <p>The raw audio waveforms are algorithmically converted into 2D visual representations called Mel Spectrograms. This maps frequency and amplitude over time, turning sound into an image.</p>
+                </div>
+                <div class="info-card">
+                    <h3>03. Neural Network</h3>
+                    <p>These generated images are passed through a TensorFlow Convolutional Neural Network (CNN). The AI uses spatial feature detection to identify textures in the sound mathematically.</p>
+                </div>
+                <div class="info-card">
+                    <h3>04. Majority Voting</h3>
+                    <p>Every single 4-second chunk gets its own independent prediction array. The final genre output is statistically calculated using a majority vote across the entire duration of the track.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- App Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
