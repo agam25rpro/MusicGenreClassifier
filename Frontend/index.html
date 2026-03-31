@@ -64,35 +64,26 @@
             <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 tracking-tight text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                 Music Genre <span class="text-cyan-400">Classifier</span>
             </h1>
-            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
+            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
                 Upload any audio track to analyze its deep acoustic fingerprints through Mel spectrogram parsing and neural network geometry.
             </p>
-        </header>
 
-        <!-- Infinite Text Marquee (Usecases & Accuracy) -->
-        <div class="w-screen overflow-hidden whitespace-nowrap py-3 mb-16 border-y border-slate-800/50 bg-slate-900/40 backdrop-blur-md opacity-90 fade-in-up">
-            <div class="inline-block animate-marquee text-slate-300 text-sm md:text-base font-display tracking-widest uppercase">
-                <!-- Content multiplied to create a seamless infinite loop -->
-                <span class="mx-6 text-cyan-400">⚡ 89% Validation Accuracy</span><span>•</span>
-                <span class="mx-6">10-Class Classification</span><span>•</span>
-                <span class="mx-6 text-purple-400">Automated Playlist Tagging</span><span>•</span>
-                <span class="mx-6">Podcast Context Grouping</span><span>•</span>
-                <span class="mx-6 text-cyan-400">Recommendation Engines</span><span>•</span>
-                <span class="mx-6">Spectrum Analysis</span><span>•</span>
-                <span class="mx-6 text-cyan-400">⚡ 89% Validation Accuracy</span><span>•</span>
-                <span class="mx-6">10-Class Classification</span><span>•</span>
-                <span class="mx-6 text-purple-400">Automated Playlist Tagging</span><span>•</span>
-                <span class="mx-6">Podcast Context Grouping</span><span>•</span>
-                <span class="mx-6 text-cyan-400">Recommendation Engines</span><span>•</span>
-                <span class="mx-6">Spectrum Analysis</span><span>•</span>
-                <span class="mx-6 text-cyan-400">⚡ 89% Validation Accuracy</span><span>•</span>
-                <span class="mx-6">10-Class Classification</span><span>•</span>
-                <span class="mx-6 text-purple-400">Automated Playlist Tagging</span><span>•</span>
-                <span class="mx-6">Podcast Context Grouping</span><span>•</span>
-                <span class="mx-6 text-cyan-400">Recommendation Engines</span><span>•</span>
-                <span class="mx-6">Spectrum Analysis</span>
+            <!-- Hero Stats Row (Driver Detection Style) -->
+            <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-6">
+                <div class="bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 md:p-6 text-center w-36 md:w-40 shadow-lg hover:border-cyan-500/50 transition-colors">
+                    <div class="font-display font-bold text-3xl md:text-4xl text-white mb-1 shadow-sm">89%</div>
+                    <div class="text-[10px] md:text-xs tracking-wider text-slate-400 uppercase font-semibold">Val Accuracy</div>
+                </div>
+                <div class="bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 md:p-6 text-center w-36 md:w-40 shadow-lg hover:border-purple-500/50 transition-colors">
+                    <div class="font-display font-bold text-3xl md:text-4xl text-white mb-1 shadow-sm">10</div>
+                    <div class="text-[10px] md:text-xs tracking-wider text-slate-400 uppercase font-semibold">Target Genres</div>
+                </div>
+                <div class="bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 md:p-6 text-center w-36 md:w-40 shadow-lg hover:border-cyan-500/50 transition-colors">
+                    <div class="font-display font-bold text-3xl md:text-4xl text-white mb-1 shadow-sm">CNN</div>
+                    <div class="text-[10px] md:text-xs tracking-wider text-slate-400 uppercase font-semibold">Architecture</div>
+                </div>
             </div>
-        </div>
+        </header>
 
         <!-- UPLOAD TIER -->
         <section id="upload-section" class="w-full max-w-3xl flex flex-col gap-6 fade-in-up delay-100">
@@ -141,6 +132,32 @@
                 <span class="relative z-10 drop-shadow-md analyzer-text">Select a Track</span>
                 <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover-gradient-bg"></div>
             </button>
+
+            <!-- Floating UI Mockup (Driver Detection Style Visual) -->
+            <div class="absolute -right-20 top-20 hidden lg:block animate-float z-20 pointer-events-none fade-in-up delay-100">
+                <div class="bg-slate-900/80 backdrop-blur-2xl border border-slate-700/60 p-5 rounded-[1.2rem] shadow-2xl w-56">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+                            <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-400 tracking-widest font-bold uppercase mb-0.5">Prediction</div>
+                            <div class="text-white font-display font-bold text-lg leading-none">Jazz / Blues</div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-[10px] text-slate-300 font-medium mb-1.5"><span>Jazz</span> <span class="text-cyan-400 font-bold">92.4%</span></div>
+                            <div class="w-full bg-slate-800 rounded-full h-1 overflow-hidden"><div class="bg-gradient-to-r from-cyan-400 to-cyan-300 h-full rounded-full w-[92%]"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[10px] text-slate-400 font-medium mb-1.5"><span>Blues</span> <span class="text-purple-400 font-bold">5.1%</span></div>
+                            <div class="w-full bg-slate-800 rounded-full h-1 overflow-hidden"><div class="bg-gradient-to-r from-purple-500 to-purple-400 h-full rounded-full w-[5%]"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </section>
 
         <!-- RESULTS ENGINE -->

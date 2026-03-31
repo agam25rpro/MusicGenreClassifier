@@ -103,23 +103,17 @@
     transform: scale(0.98);
 }
 
-/* --- Infinite Scrolling Marquee --- */
-@keyframes marquee {
-    0% {
-        transform: translateX(0);
+/* --- Floating Hero Visual Mockups --- */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
     }
-    100% {
-        /* Move exactly half of the duplicated content off-screen to create a seamless loop */
-        transform: translateX(-50%);
+    50% {
+        transform: translateY(-16px);
     }
 }
 
-.animate-marquee {
-    /* Fast loop, linear so it never eases, infinite so it never stops */
-    animation: marquee 35s linear infinite;
-    /* Pause on hover for readability */
-}
-
-.animate-marquee:hover {
-    animation-play-state: paused;
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+    /* Softly bob up and down like in Driver Detection */
 }
