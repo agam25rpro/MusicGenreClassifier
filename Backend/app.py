@@ -16,6 +16,8 @@ from typing import Dict, Any
 import tempfile
 import threading
 import gdown
+import h5py
+import json
 
 import tensorflow as tf
 
@@ -49,6 +51,24 @@ def download_model():
         url = "https://drive.google.com/uc?export=download&id=1vc4b2RpeXmnZMn2SOF0snIjos9paVEVH"
         gdown.download(url, MODEL_PATH, quiet=False)
 
+def patch_keras_batch_shape(path):
+    """Silently edits the H5 file config to be Keras-3 compliant, avoiding dependency hell"""
+    try:
+        with h5py.File(path, 'r+') as f:
+            if 'model_config' in f.attrs:
+                config_str = f.attrs['model_config']
+                if isinstance(config_str, bytes):
+                    decoded = config_str.decode('utf-8')
+                    if '"batch_shape":' in decoded:
+                        print("Applying universal Keras 3 patch...")
+                        decoded = decoded.replace('"batch_shape":', '"batch_input_shape":')
+                        f.attrs['model_config'] = decoded.encode('utf-8')
+                elif isinstance(config_str, str) and '"batch_shape":' in config_str:
+                    print("Applying universal Keras 3 patch...")
+                    f.attrs['model_config'] = config_str.replace('"batch_shape":', '"batch_input_shape":')
+    except Exception as e:
+        pass
+
 def get_model():
     """Load the model securely using threading locks for safe concurrent initialization"""
     global model
@@ -57,6 +77,7 @@ def get_model():
             # Double check inside the lock
             if model is None:
                 download_model()
+                patch_keras_batch_shape(MODEL_PATH)
                 print("Loading TensorFlow Keras model in Inference Mode...")
                 model = tf.keras.models.load_model(MODEL_PATH, compile=False)
                 print("Model loaded successfully!")
