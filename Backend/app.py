@@ -141,7 +141,7 @@ def model_prediction(chunks, loaded_model):
 
 # --- FastAPI Endpoints ---
 
-@app.get("/")
+@app.get("/api")
 async def root():
     return {"message": "Music Genre Classifier API is running"}
 
