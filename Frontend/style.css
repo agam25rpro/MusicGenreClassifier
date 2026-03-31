@@ -102,3 +102,24 @@
     background-color: rgba(147, 51, 234, 0.1);
     transform: scale(0.98);
 }
+
+/* --- Infinite Scrolling Marquee --- */
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* Move exactly half of the duplicated content off-screen to create a seamless loop */
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    /* Fast loop, linear so it never eases, infinite so it never stops */
+    animation: marquee 35s linear infinite;
+    /* Pause on hover for readability */
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}

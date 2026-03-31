@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Genre Formatter</title>
+    <title>Music Genre Classifier</title>
+    <!-- Premium SVG Favicon (Low poly audio wave) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306B6D4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d="M12 2v20M17 5v14M7 8v8M22 10v4M2 11v2"/></svg>">
     
     <!-- Fonts: Inter & Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,12 +62,37 @@
                 AI Powered Detection
             </div>
             <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 tracking-tight text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
-                Music Genre <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Classifier</span>
+                Music Genre <span class="text-cyan-400">Classifier</span>
             </h1>
-            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
                 Upload any audio track to analyze its deep acoustic fingerprints through Mel spectrogram parsing and neural network geometry.
             </p>
         </header>
+
+        <!-- Infinite Text Marquee (Usecases & Accuracy) -->
+        <div class="w-screen overflow-hidden whitespace-nowrap py-3 mb-16 border-y border-slate-800/50 bg-slate-900/40 backdrop-blur-md opacity-90 fade-in-up">
+            <div class="inline-block animate-marquee text-slate-300 text-sm md:text-base font-display tracking-widest uppercase">
+                <!-- Content multiplied to create a seamless infinite loop -->
+                <span class="mx-6 text-cyan-400">⚡ 89% Validation Accuracy</span><span>•</span>
+                <span class="mx-6">10-Class Classification</span><span>•</span>
+                <span class="mx-6 text-purple-400">Automated Playlist Tagging</span><span>•</span>
+                <span class="mx-6">Podcast Context Grouping</span><span>•</span>
+                <span class="mx-6 text-cyan-400">Recommendation Engines</span><span>•</span>
+                <span class="mx-6">Spectrum Analysis</span><span>•</span>
+                <span class="mx-6 text-cyan-400">⚡ 89% Validation Accuracy</span><span>•</span>
+                <span class="mx-6">10-Class Classification</span><span>•</span>
+                <span class="mx-6 text-purple-400">Automated Playlist Tagging</span><span>•</span>
+                <span class="mx-6">Podcast Context Grouping</span><span>•</span>
+                <span class="mx-6 text-cyan-400">Recommendation Engines</span><span>•</span>
+                <span class="mx-6">Spectrum Analysis</span><span>•</span>
+                <span class="mx-6 text-cyan-400">⚡ 89% Validation Accuracy</span><span>•</span>
+                <span class="mx-6">10-Class Classification</span><span>•</span>
+                <span class="mx-6 text-purple-400">Automated Playlist Tagging</span><span>•</span>
+                <span class="mx-6">Podcast Context Grouping</span><span>•</span>
+                <span class="mx-6 text-cyan-400">Recommendation Engines</span><span>•</span>
+                <span class="mx-6">Spectrum Analysis</span>
+            </div>
+        </div>
 
         <!-- UPLOAD TIER -->
         <section id="upload-section" class="w-full max-w-3xl flex flex-col gap-6 fade-in-up delay-100">
