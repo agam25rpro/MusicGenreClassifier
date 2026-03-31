@@ -1,98 +1,248 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Genre Classifier</title>
+    <title>Music Genre Formatter</title>
     
-    <!-- Google Fonts: Space Grotesk -->
+    <!-- Fonts: Inter & Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
     
-    <!-- Chart.js CDN -->
+    <!-- Tailwind CSS (Zero Build CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        deepbg: '#05050A',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Custom CSS -->
+
+    <!-- App Logic & Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-    <main class="container">
+<body class="bg-deepbg text-slate-200 antialiased min-h-screen relative overflow-x-hidden selection:bg-cyan-500/30 selection:text-white">
+    
+    <!-- CSS Noise Texture Layer -->
+    <div class="fixed inset-0 pointer-events-none z-[9999] noise-overlay mix-blend-overlay opacity-30"></div>
+
+    <!-- Animated SVG Ambient Wave Background -->
+    <div class="fixed top-0 left-0 w-full h-[80vh] pointer-events-none z-0 overflow-hidden opacity-20 wave-hero-bg">
+        <svg viewBox="0 0 1440 320" preserveAspectRatio="none" class="w-full h-full text-cyan-900 fill-current">
+            <path d="M0,160L40,176C80,192,160,224,240,213.3C320,203,400,149,480,144C560,139,640,181,720,208C800,235,880,245,960,240C1040,235,1120,213,1200,192C1280,171,1360,149,1400,138.7L1440,128L1440,0L1400,0C1360,0,1280,0,1200,0C1120,0,1040,0,960,0C880,0,800,0,720,0C640,0,560,0,480,0C400,0,320,0,240,0C160,0,80,0,40,0L0,0Z"></path>
+        </svg>
+    </div>
+
+    <!-- Glass Glow Blobs -->
+    <div class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-600/20 blur-[120px] rounded-full pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-purple-600/20 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+    <!-- MAIN CONTENT -->
+    <main class="relative z-10 container mx-auto px-4 py-20 flex flex-col items-center">
         
-        <header class="app-header">
-            <h1>MUSIC GENRE CLASSIFIER</h1>
-            <p>Upload any audio file to analyze its deep acoustic patterns and detect its genre.</p>
+        <!-- Hero Title -->
+        <header class="text-center mb-16 fade-in-up">
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-sm font-semibold tracking-widest uppercase backdrop-blur-md glow-pulse">
+                AI Powered Detection
+            </div>
+            <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 tracking-tight text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+                Music Genre <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Classifier</span>
+            </h1>
+            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                Upload any audio track to analyze its deep acoustic fingerprints through Mel spectrogram parsing and neural network geometry.
+            </p>
         </header>
 
-        <!-- Upload Section -->
-        <section id="upload-section" class="upload-container">
-            <div id="dropzone" class="dropzone">
-                <div class="dropzone-content">
-                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 4V20M12 4L8 8M12 4L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/>
-                        <path d="M4 20H20" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
-                    </svg>
-                    <p class="dropzone-text">Drag & drop your .wav or .mp3 here</p>
-                    <p class="dropzone-subtext">or click to browse local files</p>
+        <!-- UPLOAD TIER -->
+        <section id="upload-section" class="w-full max-w-3xl flex flex-col gap-6 fade-in-up delay-100">
+            <!-- Dropzone Container (Glowing Border Trick) -->
+            <div class="relative p-[2px] rounded-3xl bg-gradient-to-br from-cyan-500/40 via-transparent to-purple-600/40 hover:from-cyan-400 hover:to-purple-500 transition-all duration-500 group dropzone-wrapper shadow-lg hover:shadow-[0_0_40px_rgba(6,182,212,0.2)]">
+                <div id="dropzone" class="relative w-full h-80 bg-slate-950/80 backdrop-blur-xl rounded-3xl flex flex-col items-center justify-center cursor-pointer overflow-hidden border border-dashed border-slate-700/50 group-hover:border-transparent transition-all overflow-hidden dropzone-inner">
+                    
+                    <!-- Content Inside Node -->
+                    <div id="dropzone-content" class="flex flex-col items-center justify-center transform group-hover:scale-105 transition-transform duration-300 pointer-events-none">
+                        
+                        <!-- Premium Upload Icon SVG -->
+                        <div class="bg-cyan-500/10 p-4 rounded-2xl mb-6 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                            <svg class="w-10 h-10 text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        
+                        <h3 class="text-2xl font-display font-semibold text-white mb-2">Drag & Drop Music</h3>
+                        <p class="text-slate-400 mb-2">or <span class="text-cyan-400 group-hover:text-cyan-300 underline underline-offset-4 decoration-cyan-500/30 group-hover:decoration-cyan-400 transition-all">browse files</span></p>
+                        <p class="text-xs text-slate-500/80 font-medium tracking-wide mt-4 uppercase">Supports MP3, WAV up to 10MB</p>
+                    </div>
+
+                    <input type="file" id="file-input" accept="audio/mpeg, audio/wav, audio/x-wav, audio/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                 </div>
-                <input type="file" id="file-input" accept="audio/mpeg, audio/wav, audio/*" hidden>
+                
+                <!-- File Preview Slate -->
+                <div id="file-preview" class="hidden absolute inset-[2px] bg-slate-900/90 backdrop-blur-2xl rounded-[1.4rem] flex flex-col items-center justify-center z-20">
+                    <div class="flex items-center gap-4 bg-slate-800/50 border border-slate-700/50 px-6 py-4 rounded-2xl">
+                        <svg class="w-6 h-6 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+                        <span id="file-name" class="font-medium text-lg text-white">audio.mp3</span>
+                        <button id="remove-file" class="ml-4 p-2 text-slate-400 hover:bg-slate-700/50 hover:text-red-400 rounded-lg transition-colors">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div id="file-preview" class="file-preview hidden">
-                <span id="file-name" class="file-name">filename.mp3</span>
-                <button id="remove-file" class="remove-btn">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
-                </button>
-            </div>
+            <!-- Error Toast -->
+            <div id="error-message" class="hidden text-sm w-full p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-center font-medium backdrop-blur-sm"></div>
 
-            <button id="analyze-btn" class="btn primary-btn" disabled>ANALYZE GENRE</button>
-            <div id="error-message" class="error-message hidden"></div>
+            <!-- Gradient Primary Analyze Button -->
+            <button id="analyze-btn" disabled class="group relative w-full py-5 rounded-2xl bg-gradient-to-r from-slate-800 to-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-display font-bold text-lg tracking-widest text-slate-400 uppercase overflow-hidden shadow-xl active:scale-[0.98]">
+                <!-- Active gradient injected via JS during state change -->
+                <span class="relative z-10 drop-shadow-md analyzer-text">Select a Track</span>
+                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover-gradient-bg"></div>
+            </button>
         </section>
 
-        <!-- Results Section -->
-        <section id="results-section" class="results-container hidden">
-            <div class="result-header">
-                <h2>PREDICTED GENRE</h2>
-                <h1 id="winning-genre" class="winning-genre-text">Unknown</h1>
-            </div>
-
-            <div class="chart-wrapper">
-                <h3>Prediction Confidence</h3>
-                <div style="position: relative; height:300px; width:100%">
-                    <canvas id="confidence-chart"></canvas>
-                </div>
-            </div>
+        <!-- RESULTS ENGINE -->
+        <section id="results-section" class="hidden w-full max-w-4xl mt-12 bg-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            <!-- Decorative interior blur for glass feel -->
+            <div class="absolute -top-32 -left-32 w-64 h-64 bg-cyan-600/10 blur-3xl rounded-full"></div>
             
-            <button id="reset-btn" class="btn secondary-btn">ANALYZE ANOTHER</button>
+            <div class="grid md:grid-cols-2 gap-12 relative z-10">
+                <!-- Data Pillar -->
+                <div class="flex flex-col justify-center h-full">
+                    <p class="text-slate-400 text-sm font-semibold tracking-widest uppercase mb-2">Dominant Neural Prediction</p>
+                    <h2 id="winning-genre" class="font-display font-bold text-6xl md:text-[5rem] text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-md mb-8 leading-tight">
+                        Rock
+                    </h2>
+                    
+                    <button id="reset-btn" class="flex items-center gap-2 w-max px-6 py-3 rounded-full bg-slate-800/50 border border-slate-700 hover:bg-slate-800 hover:border-cyan-500/50 text-white font-medium transition-all group">
+                        <svg class="w-4 h-4 text-cyan-400 group-hover:-rotate-180 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                        Analyze Another
+                    </button>
+                </div>
+
+                <!-- Doughnut Canvas -->
+                <div class="relative flex items-center justify-center p-6 bg-slate-950/50 rounded-2xl border border-slate-800/50 shadow-inner">
+                    <div class="w-full h-[300px]">
+                        <canvas id="confidence-chart"></canvas>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <!-- How It Works Section -->
-        <section class="how-it-works">
-            <h2>HOW IT WORKS</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>01. Chunking</h3>
-                    <p>Instead of processing the entire song at once, the audio is mathematically split into overlapping 4-second chunks. This ensures continuous acoustic patterns are captured smoothly.</p>
+        <!-- SVG Premium Wave Divider -->
+        <div class="w-full max-w-5xl my-24 flex items-center justify-center opacity-60">
+            <svg class="w-full h-8" viewBox="0 0 1000 30" fill="none" preserveAspectRatio="none">
+                <path d="M0,15 Q250,30 500,15 T1000,15" stroke="url(#paint0_linear)" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+                <defs>
+                    <linearGradient id="paint0_linear" x1="0" y1="15" x2="1000" y2="15" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#05050A" />
+                        <stop offset="0.3" stop-color="#06B6D4" />
+                        <stop offset="0.7" stop-color="#9333EA" />
+                        <stop offset="1" stop-color="#05050A" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <!-- HOW IT WORKS TIMELINE -->
+        <section class="w-full max-w-4xl scroll-reveal">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-white tracking-tight">Technical Pipeline</h2>
+                <p class="text-slate-400 mt-4">Discover how audio frequencies are parsed into geometrical geometry.</p>
+            </div>
+
+            <!-- Vertical Flow -->
+            <div class="relative border-l-2 border-slate-800/60 ml-4 md:mx-auto md:w-full space-y-12 pb-8">
+                
+                <!-- Step 1 -->
+                <div class="relative pl-8 md:w-1/2 md:ml-auto md:pl-12 group step-card">
+                    <div class="absolute w-5 h-5 rounded-full bg-deepbg border-4 border-slate-700 -left-[11px] md:-left-[11px] top-6 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.6)] transition-all duration-300 z-10"></div>
+                    <div class="bg-slate-900/40 backdrop-blur-md p-8 rounded-2xl border border-slate-800/50 group-hover:-translate-y-1 group-hover:border-slate-700 transition-all duration-300 hover:shadow-2xl">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="p-3 bg-cyan-500/10 rounded-xl">
+                                <!-- Chunking SVG Icon -->
+                                <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                            </div>
+                            <h3 class="font-display text-xl font-bold text-white">01. Window Chunking</h3>
+                        </div>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Continuous audio is mathematically spliced into cascading 4-second overlapping structural windows, granting continuous fingerprinting without hard signal loss.
+                        </p>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <h3>02. Mel Spectrograms</h3>
-                    <p>The raw audio waveforms are algorithmically converted into 2D visual representations called Mel Spectrograms. This maps frequency and amplitude over time, turning sound into an image.</p>
+
+                <!-- Step 2 -->
+                <div class="relative pl-8 md:w-1/2 md:pr-12 md:pl-0 md:text-right group step-card">
+                    <!-- Adjusted timeline point specifically for reversing alternating layout if screen is MD -->
+                    <div class="absolute w-5 h-5 rounded-full bg-deepbg border-4 border-slate-700 -left-[11px] md:left-auto md:-right-[11px] md:bottom-auto top-6 group-hover:border-purple-400 group-hover:shadow-[0_0_15px_rgba(147,51,234,0.6)] transition-all duration-300 z-10"></div>
+                    <div class="bg-slate-900/40 backdrop-blur-md p-8 rounded-2xl border border-slate-800/50 group-hover:-translate-y-1 group-hover:border-slate-700 transition-all duration-300 hover:shadow-2xl">
+                        <div class="flex items-center gap-4 mb-4 md:flex-row-reverse">
+                            <div class="p-3 bg-purple-500/10 rounded-xl">
+                                <!-- Spectrogram Grid -->
+                                <svg class="w-6 h-6 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                            </div>
+                            <h3 class="font-display text-xl font-bold text-white">02. Mel Spectrograms</h3>
+                        </div>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Raw amplitude frequencies are run through Librosa's Fast Fourier Transforms, algorithmically flattening sound into an interpretable 2D Heatmap visual matrix.
+                        </p>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <h3>03. Neural Network</h3>
-                    <p>These generated images are passed through a TensorFlow Convolutional Neural Network (CNN). The AI uses spatial feature detection to identify textures in the sound mathematically.</p>
+
+                <!-- Step 3 -->
+                <div class="relative pl-8 md:w-1/2 md:ml-auto md:pl-12 group step-card">
+                    <div class="absolute w-5 h-5 rounded-full bg-deepbg border-4 border-slate-700 -left-[11px] md:-left-[11px] top-6 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.6)] transition-all duration-300 z-10"></div>
+                    <div class="bg-slate-900/40 backdrop-blur-md p-8 rounded-2xl border border-slate-800/50 group-hover:-translate-y-1 group-hover:border-slate-700 transition-all duration-300 hover:shadow-2xl">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="p-3 bg-cyan-500/10 rounded-xl">
+                                <!-- Neural Net -->
+                                <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                            </div>
+                            <h3 class="font-display text-xl font-bold text-white">03. Neural Inference</h3>
+                        </div>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            A highly optimized TensorFlow Convolutional Neural Network absorbs the 2D imagery, isolating specific visual geometry that correlates with specific music genres.
+                        </p>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <h3>04. Majority Voting</h3>
-                    <p>Every single 4-second chunk gets its own independent prediction array. The final genre output is statistically calculated using a majority vote across the entire duration of the track.</p>
+
+                <!-- Step 4 -->
+                <div class="relative pl-8 md:w-1/2 md:pr-12 md:pl-0 md:text-right group step-card">
+                    <div class="absolute w-5 h-5 rounded-full bg-deepbg border-4 border-slate-700 -left-[11px] md:left-auto md:-right-[11px] md:bottom-auto top-6 group-hover:border-purple-400 group-hover:shadow-[0_0_15px_rgba(147,51,234,0.6)] transition-all duration-300 z-10"></div>
+                    <div class="bg-slate-900/40 backdrop-blur-md p-8 rounded-2xl border border-slate-800/50 group-hover:-translate-y-1 group-hover:border-slate-700 transition-all duration-300 hover:shadow-2xl">
+                        <div class="flex items-center gap-4 mb-4 md:flex-row-reverse">
+                            <div class="p-3 bg-purple-500/10 rounded-xl">
+                                <!-- Voting -->
+                                <svg class="w-6 h-6 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
+                            </div>
+                            <h3 class="font-display text-xl font-bold text-white">04. Statistical Consensus</h3>
+                        </div>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Millions of internal weights spit out isolated predictions for every chunk. A dynamic statistical majority voting architecture elects the true dominant acoustic genre output.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
-
-    <!-- App Logic -->
+    
+    <!-- Scripts -->
     <script src="app.js"></script>
 </body>
 </html>

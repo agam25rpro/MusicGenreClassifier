@@ -1,18 +1,17 @@
 /**
- * Music Genre Classifier Frontend Logic
- * Connects to Hugging Face Spaces FastAPI Server
+ * Premium Music Genre Classifier Logic
  */
 
-// --- Configuration ---
 const API_URL = 'https://agamrampal-music.hf.space/api/classify';
 
-// --- DOM Elements ---
-const dropzone = document.getElementById('dropzone');
+// DOM Nodes
+const dropzoneInner = document.querySelector('.dropzone-inner');
 const fileInput = document.getElementById('file-input');
 const filePreview = document.getElementById('file-preview');
 const fileNameDisplay = document.getElementById('file-name');
 const removeBtn = document.getElementById('remove-file');
 const analyzeBtn = document.getElementById('analyze-btn');
+const analyzerText = document.querySelector('.analyzer-text');
 const errorMessage = document.getElementById('error-message');
 
 const uploadSection = document.getElementById('upload-section');
@@ -23,49 +22,74 @@ const resetBtn = document.getElementById('reset-btn');
 let selectedFile = null;
 let confidenceChart = null;
 
-// --- Event Listeners (Drag & Drop + File Selection) ---
+// ======================================
+// INTERSECTION OBSERVERS (Micro-Interactions)
+// ======================================
 
-dropzone.addEventListener('click', () => fileInput.click());
+document.addEventListener("DOMContentLoaded", () => {
+    // Scroll reveal observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                
+                // Trigger children if it's the timeline
+                const stepCards = entry.target.querySelectorAll('.step-card');
+                if (stepCards.length > 0) {
+                    stepCards.forEach(card => card.classList.add('visible'));
+                }
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+    });
 
-dropzone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropzone.classList.add('dragover');
+    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
 });
 
-dropzone.addEventListener('dragleave', () => {
-    dropzone.classList.remove('dragover');
-});
+// ======================================
+// FILE UPLOAD LOGIC
+// ======================================
 
-dropzone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropzone.classList.remove('dragover');
-    
-    if (e.dataTransfer.files.length > 0) {
-        handleFileSelection(e.dataTransfer.files[0]);
-    }
-});
-
+// The input automatically handles clicking. We just listen.
 fileInput.addEventListener('change', (e) => {
-    if (e.target.files.length > 0) {
-        handleFileSelection(e.target.files[0]);
-    }
+    if (e.target.files.length > 0) handleFileSelection(e.target.files[0]);
 });
 
-removeBtn.addEventListener('click', clearFileSelection);
+// Drag & Drop specific CSS logic
+dropzoneInner.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzoneInner.classList.add('dragover');
+});
+
+dropzoneInner.addEventListener('dragleave', () => {
+    dropzoneInner.classList.remove('dragover');
+});
+
+dropzoneInner.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzoneInner.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) handleFileSelection(e.dataTransfer.files[0]);
+});
+
+removeBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent re-triggering dropzone click
+    clearFileSelection();
+});
+
 resetBtn.addEventListener('click', resetApp);
 analyzeBtn.addEventListener('click', analyzeAudio);
 
-// --- Functions ---
+// ======================================
+// FUNCTIONS
+// ======================================
 
 function handleFileSelection(file) {
-    // Validate file type
     const validTypes = ['audio/mpeg', 'audio/wav', 'audio/mp3', 'audio/x-wav'];
-    const validExtensions = ['.mp3', '.wav'];
+    const validExts = ['.mp3', '.wav'];
     
-    const isValidType = validTypes.includes(file.type);
-    const isValidExt = validExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
-    
-    if (!isValidType && !isValidExt) {
+    if (!validTypes.includes(file.type) && !validExts.some(e => file.name.toLowerCase().endsWith(e))) {
         showError('Please upload a valid .mp3 or .wav audio file.');
         return;
     }
@@ -73,9 +97,15 @@ function handleFileSelection(file) {
     selectedFile = file;
     fileNameDisplay.textContent = file.name;
     
-    dropzone.classList.add('hidden');
+    // UI State Swap
     filePreview.classList.remove('hidden');
+    dropzoneInner.querySelector('#dropzone-content').classList.add('opacity-0');
+    
+    // Activate Button into Premium State
     analyzeBtn.disabled = false;
+    analyzerText.textContent = 'ANALYZE AUDIO PATTERNS';
+    analyzerText.classList.replace('text-slate-400', 'text-white');
+    // Button naturally picks up hover gradients in CSS because it's no longer disabled
     hideError();
 }
 
@@ -83,18 +113,23 @@ function clearFileSelection() {
     selectedFile = null;
     fileInput.value = '';
     
-    dropzone.classList.remove('hidden');
     filePreview.classList.add('hidden');
+    dropzoneInner.querySelector('#dropzone-content').classList.remove('opacity-0');
+    
+    // Reset Button
     analyzeBtn.disabled = true;
+    analyzerText.textContent = 'Select a Track';
+    analyzerText.classList.replace('text-white', 'text-slate-400');
     hideError();
 }
 
 function resetApp() {
     clearFileSelection();
-    resultsSection.classList.add('hidden');
-    uploadSection.classList.remove('hidden');
     
-    // Destroy chart if exists
+    // Fade out Results, Fade in Upload
+    resultsSection.classList.add('hidden');
+    uploadSection.classList.remove('opacity-0', 'pointer-events-none', 'hidden');
+    
     if (confidenceChart) {
         confidenceChart.destroy();
         confidenceChart = null;
@@ -105,19 +140,25 @@ function showError(msg) {
     errorMessage.textContent = msg;
     errorMessage.classList.remove('hidden');
 }
-
 function hideError() {
     errorMessage.classList.add('hidden');
 }
 
-// --- API Communication and Chart Rendering ---
+// ======================================
+// API & CHARTING
+// ======================================
 
 async function analyzeAudio() {
     if (!selectedFile) return;
 
-    // Set Loading State
+    // Premium Loading State
     analyzeBtn.disabled = true;
-    analyzeBtn.textContent = 'ANALYZING SOUND WAVES...';
+    analyzerText.innerHTML = `<span class="inline-flex items-center gap-2"><svg class="animate-spin -ml-1 mr-3 w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Compiling Heatmaps...</span>`;
+    
+    // We force hover gradient background color even when disabled during API call for aesthetics
+    const hoverBg = analyzeBtn.querySelector('.hover-gradient-bg');
+    hoverBg.classList.add('opacity-100');
+
     hideError();
 
     const formData = new FormData();
@@ -127,10 +168,7 @@ async function analyzeAudio() {
         const response = await fetch(API_URL, {
             method: 'POST',
             body: formData,
-            // Huggingface spaces usually handle CORS well natively, but keep fetch straightforward
-            headers: {
-                'Accept': 'application/json'
-            }
+            headers: { 'Accept': 'application/json' }
         });
 
         if (!response.ok) {
@@ -140,61 +178,61 @@ async function analyzeAudio() {
 
         const data = await response.json();
         
-        // Success - reveal results
         displayResults(data);
 
     } catch (error) {
         console.error("Classification Error:", error);
-        showError(`Analysis failed: ${error.message}. Is the Hugging Face Space running?`);
+        showError(`Analysis failed: ${error.message}. Is your backend active?`);
         analyzeBtn.disabled = false;
-        analyzeBtn.textContent = 'ANALYZE GENRE';
+        analyzerText.textContent = 'RE-ANALYZE GENRE';
+        hoverBg.classList.remove('opacity-100');
     }
 }
 
 function displayResults(data) {
-    // Hide upload, show results
+    // Smooth transition between sections
     uploadSection.classList.add('hidden');
     resultsSection.classList.remove('hidden');
-    analyzeBtn.textContent = 'ANALYZE GENRE'; // Reset for next time
+    resultsSection.classList.add('fade-in-up'); // Re-trigger animation
 
-    // Setup Text
-    // Remove the musical note emoji if Python sent it, keep it sharp via UI
+    // Reset button states for future runs
+    const hoverBg = analyzeBtn.querySelector('.hover-gradient-bg');
+    hoverBg.classList.remove('opacity-100');
+
+    // Display robust genre string
     let genre = data.predicted_genre.replace('🎵 ', '');
     winningGenreText.textContent = genre;
 
-    // Structure chart data
+    // Destructure JSON payload
     const labels = Object.keys(data.distribution);
     const rawValues = Object.values(data.distribution);
-    // Convert decimals to percentages (0.45 -> 45)
     const percentages = rawValues.map(val => (val * 100).toFixed(1));
 
-    // Colors matching strictly to our two-color minimalist theme + monochrome tiers
-    // Using opacity variations of our Cyan accent and grayscale to stay on-brand
-    const colors = [
-        '#00FFFF', // Primary Cyan
-        '#00CCCC',
-        '#009999',
-        '#006666',
-        '#FFFFFF', // White
-        '#CCCCCC',
-        '#999999',
-        '#666666',
-        '#333333',
-        '#1A1A1A'
+    // NEW PREMIUN COLOR PALETTE (Spotify/Linear themed deep violet/cyan structure)
+    const premiumColors = [
+        '#06B6D4', // Cyan 500
+        '#8B5CF6', // Violet 500
+        '#3B82F6', // Blue 500
+        '#D946EF', // Fuchsia 500
+        '#0284C7', // Sky 600
+        '#7C3AED', // Violet 600
+        '#1E293B', // Slate 800
+        '#334155', // Slate 700
+        '#475569', // Slate 600
+        '#64748B', // Slate 500
     ];
 
-    renderChart(labels, percentages, colors);
+    renderChart(labels, percentages, premiumColors);
 }
 
-function renderChart(labels, data, colors) {
+function renderChart(labels, data, premiumColors) {
     const ctx = document.getElementById('confidence-chart').getContext('2d');
     
-    if (confidenceChart) {
-        confidenceChart.destroy();
-    }
+    if (confidenceChart) confidenceChart.destroy();
 
-    Chart.defaults.color = '#999999';
-    Chart.defaults.font.family = "'Space Grotesk', sans-serif";
+    // Sync Chart.js fonts perfectly with our Tailwind fonts
+    Chart.defaults.color = '#94A3B8'; // Slate 400
+    Chart.defaults.font.family = "'Inter', sans-serif";
 
     confidenceChart = new Chart(ctx, {
         type: 'doughnut',
@@ -202,36 +240,40 @@ function renderChart(labels, data, colors) {
             labels: labels,
             datasets: [{
                 data: data,
-                backgroundColor: colors,
-                borderColor: '#0A0A0A', // Deep black border to match background
-                borderWidth: 2,
-                hoverOffset: 4
+                backgroundColor: premiumColors,
+                borderColor: '#020617', // Match Slate 950 deep bg perfectly
+                borderWidth: 4,
+                hoverOffset: 6,
+                hoverBorderColor: '#00FFFF', // Cyan glow offset on hover
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '70%', // Sleek thin doughnut
+            cutout: '75%', // Extremely thin sharp doughnut 
             plugins: {
                 legend: {
                     position: 'right',
                     labels: {
-                        color: '#FFFFFF',
-                        padding: 15,
+                        color: '#E2E8F0', // Slate 200
+                        padding: 20,
                         usePointStyle: true,
-                        pointStyle: 'rect'
+                        pointStyle: 'circle',
+                        font: { size: 13, weight: '500' }
                     }
                 },
                 tooltip: {
-                    backgroundColor: '#141414',
-                    titleColor: '#00FFFF',
-                    bodyColor: '#FFFFFF',
-                    borderColor: '#333333',
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)', // Slate 900 Glassmorphic
+                    titleColor: '#06B6D4', // Cyan Title
+                    bodyColor: '#F8FAFC',
+                    bodyFont: { size: 14, family: "'Space Grotesk', sans-serif" },
+                    borderColor: 'rgba(30, 41, 59, 1)',
                     borderWidth: 1,
-                    padding: 12,
+                    padding: 16,
+                    cornerRadius: 12, // Rounded Tooltips
                     callbacks: {
                         label: function(context) {
-                            return ` ${context.label}: ${context.raw}%`;
+                            return ` Confidence: ${context.raw}%`;
                         }
                     }
                 }
