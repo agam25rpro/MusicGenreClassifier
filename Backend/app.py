@@ -5,9 +5,6 @@ import sys
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-# CRITICAL: Force Keras 2 legacy behavior for inference to prevent Keras 3 'batch_shape' deserialization exceptions
-os.environ['TF_USE_LEGACY_KERAS'] = '1'
-
 import librosa
 import numpy as np
 from collections import Counter
