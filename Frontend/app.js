@@ -14,7 +14,7 @@ const analyzeBtn = document.getElementById('analyze-btn');
 const analyzerText = document.querySelector('.analyzer-text');
 const errorMessage = document.getElementById('error-message');
 
-const uploadSection = document.getElementById('upload-section');
+const uploadSection = document.getElementById('demo');
 const resultsSection = document.getElementById('results-section');
 const winningGenreText = document.getElementById('winning-genre');
 const resetBtn = document.getElementById('reset-btn');

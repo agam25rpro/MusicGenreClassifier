@@ -46,9 +46,9 @@ Try out the live application here: [Music Genre Classifier Live Demo](https://hu
 
 Below are screenshots of the deployed application interface:
 
-![Upload Interface](upload_interface.png)
+![Upload Interface](assets/upload_interface.png)
 
-![Visualization Example](visualization_example.png)
+![Visualization Example](assets/visualization_example.png)
 
 ---
 
